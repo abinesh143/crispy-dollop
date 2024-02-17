@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 export async function createPost(code) {
   try {
-    const response = await fetch(`/api/applist?code=bwluxv}`, {
+    const response = await fetch(`http://localhost:3000/api/applist?code=bwluxv}`, {
       method: "GET",
     });
     const list = await response.json();

@@ -13,7 +13,9 @@ let mongo = new MongoClient(uri, options);
 export async function GET(req) {
   const url = new URL(req.url);
   const query = new URLSearchParams(url.search);
-  const code = query.get("code");
+  // const code = query.get("code");
+
+  const code ='bwluxv'
   try {
     const client = await mongo.connect();
     const db = client.db("app-maker-pro");
