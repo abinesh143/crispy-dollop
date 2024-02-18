@@ -2,24 +2,45 @@
 
 import { redirect } from "next/navigation";
 
-export async function createPost(code) {
+export async function createPost(secretCode) {
   try {
-    const response = await fetch(`http://localhost:3000/api/applist?code=bwluxv}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `https://app.freeappmaker.pro/api/applist?code=${secretCode}`,
+      {
+        method: "GET",
+      }
+    );
     const list = await response.json();
-    console.log(list, "<==================list");
+    return list;
   } catch (error) {
     console.error(error);
+    return {};
   }
-  console.log(code, '<=====================code');
-  // redirect("https://games.smileyshopy.in/");
 }
 
-export default async function Profile({ params }) {
-  const team = await createPost(params);
+export default async function Profile({ searchParams }) {
+  const secretCode = searchParams["id"];
 
-  return <main>
-    Abinesh
-  </main>;
+  if (secretCode) {
+    const data = await createPost(secretCode);
+    if (data && data["website"]) {
+      redirect(data["website"]);
+    }
+  }
+
+  return (
+    <main>
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader"></div>
+      </div>
+    </main>
+  );
 }
+
+// http://localhost:3000/?id=bwluxv
+
+// http://localhost:3000/api/applist?code=${secretCode}
+
+// https://app.freeappmaker.pro/?id=bwluxv
+
+// https://app.freeappmaker.pro/api/applist?code=${secretCode}
