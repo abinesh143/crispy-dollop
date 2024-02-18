@@ -14,7 +14,7 @@ export async function GET(req) {
   try {
     const url = new URL(req.url);
     const query = new URLSearchParams(url.search);
-    const id = query.get("code");
+    const code = query.get("code");
     const client = await mongo.connect();
     const db = client.db("app-maker-pro");
     const feedback = await db
@@ -23,6 +23,7 @@ export async function GET(req) {
     await mongo.close();
     return NextResponse.json(feedback);
   } catch (error) {
+    await mongo.close();
     return NextResponse.json({ message: "Failed" });
   }
 }
