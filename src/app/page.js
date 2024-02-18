@@ -10,8 +10,7 @@ export async function createPost(secretCode) {
         method: "GET",
       }
     );
-    const list = await response.json();
-    return list;
+    return await response.json();
   } catch (error) {
     console.error(error);
     return {};
