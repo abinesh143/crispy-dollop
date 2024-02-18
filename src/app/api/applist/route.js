@@ -15,6 +15,7 @@ export async function GET(req) {
     const url = new URL(req.url);
     const query = new URLSearchParams(url.search);
     const code = query.get("code");
+
     const client = await mongo.connect();
     const db = client.db("app-maker-pro");
     const feedback = await db

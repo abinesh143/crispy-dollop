@@ -1,33 +1,33 @@
-"use server";
+"use client";
 
-import { redirect } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-export async function createPost(secretCode) {
-  console.log(secretCode, "secrest");
-  console.log(`https://app.freeappmaker.pro/api/applist?code=${secretCode}`);
-  try {
-    const response = await fetch(
-      `https://app.freeappmaker.pro/api/applist?code=${secretCode}`,
-      {
+export default function Profile() {
+  const params = useSearchParams();
+
+  const redirectWebsite = async (secretCode) => {
+    try {
+      const response = await fetch(`/api/applist?code=${secretCode}`, {
         method: "GET",
+      });
+      const data = await response.json();
+
+      if (data && data["website"]) {
+        window.location.replace(data["website"]);
       }
-    );
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return {};
-  }
-}
-
-export default async function Profile({ searchParams }) {
-  const secretCode = searchParams["id"];
-
-  if (secretCode) {
-    const data = await createPost(secretCode);
-    if (data && data["website"]) {
-      redirect(data["website"]);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
+
+  useEffect(() => {
+    const secretCode = params.get("id");
+
+    if (secretCode) {
+      redirectWebsite(secretCode);
+    }
+  }, [params]);
 
   return (
     <main>
