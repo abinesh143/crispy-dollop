@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 
 export async function createPost(secretCode) {
+  console.log(secretCode, "secrest");
+  console.log(`https://app.freeappmaker.pro/api/applist?code=${secretCode}`);
   try {
     const response = await fetch(
       `https://app.freeappmaker.pro/api/applist?code=${secretCode}`,

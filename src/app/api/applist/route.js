@@ -19,7 +19,7 @@ export async function GET(req) {
     const db = client.db("app-maker-pro");
     const feedback = await db
       .collection("applist")
-      .findOne({ secretCode: 'bwluxv' });
+      .findOne({ secretCode: code });
     await mongo.close();
     return NextResponse.json(feedback);
   } catch (error) {
