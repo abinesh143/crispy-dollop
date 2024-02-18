@@ -1,15 +1,16 @@
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-export default function Loading() {
-  const params = useSearchParams();
+export default function Home() {
+
+  const router = useRouter()
 
   const redirectWebsite = async (secretCode) => {
     try {
-      const response = await fetch(`/api/applist?code=${secretCode}`, {
-        method: "GET",
-      });
+      const response = await fetch(`/api/applist/?code=${secretCode}`, );
       const data = await response.json();
+
+      console.log(data)
 
       if (data && data["website"]) {
         window.location.replace(data["website"]);
@@ -20,12 +21,11 @@ export default function Loading() {
   };
 
   useEffect(() => {
-    const secretCode = params.get("id");
 
-    if (secretCode) {
-      redirectWebsite(secretCode);
+    if (router.query?.id) {
+      redirectWebsite(router.query?.id);
     }
-  }, [params]);
+  }, [router]);
 
   return (
     <main>
@@ -35,3 +35,7 @@ export default function Loading() {
     </main>
   );
 }
+
+// http://localhost:3000/?id=bwluxv
+
+// https://app.freeappmaker.pro/?id=bwluxv

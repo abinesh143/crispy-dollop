@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
 const uri =
@@ -10,21 +9,21 @@ const options = {
 
 const mongo = new MongoClient(uri, options);
 
-export async function GET(req) {
-  try {
-    const url = new URL(req.url);
-    const query = new URLSearchParams(url.search);
-    const code = query.get("code");
+export default async function handler(req, res) {
+   if (req.method === "GET") {
+    const code = req.query.code
 
     const client = await mongo.connect();
     const db = client.db("app-maker-pro");
-    const feedback = await db
+    const data = await db
       .collection("applist")
       .findOne({ secretCode: code });
-    await mongo.close();
-    return NextResponse.json(feedback);
-  } catch (error) {
-    await mongo.close();
-    return NextResponse.json({ message: "Failed" });
+
+    await mongo.close(); // Closing Mongo
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).json({ message: "Failed" });
+    }
   }
 }
